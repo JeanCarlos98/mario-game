@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<module>
+    <entry-point class="nl.arjanfrans.mario.client.GwtLauncher"/>
+    <set-configuration-property name="gdx.assetpath" value="../mario-game-android/assets"/>
+    <inherits name="MarioGame"/>
+    <inherits name="com.badlogic.gdx.backends.gdx_backends_gwt"/>
+</module>
