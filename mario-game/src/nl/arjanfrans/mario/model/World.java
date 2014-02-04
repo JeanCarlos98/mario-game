@@ -152,11 +152,17 @@ public class World {
 	 */
 	private void generateFlag(MapLayer layer) {
 		MapObject obj = layer.getObjects().get("flag");
-		float x = (Integer) obj.getProperties().get("x") * (1/16f);
-		float y = (Integer) obj.getProperties().get("y") * (1/16f);
+		float x = (Integer) obj.getProperties().get("x") * World.scale;
+		float y = (Integer) obj.getProperties().get("y") * World.scale;
 		float width = Float.valueOf((String) obj.getProperties().get("width"));
 		float height = Float.valueOf((String) obj.getProperties().get("height"));
-		flag = new Flag(x, y, width, height);
+		
+		// The object in the map named 'flag_end' determines the position Mario walks to after the flag
+		MapObject flag_end = layer.getObjects().get("flag_end");
+		float flag_end_x = (Integer) flag_end.getProperties().get("x") * World.scale;	
+		float flag_end_y = (Integer) flag_end.getProperties().get("y") * World.scale;	
+		
+		flag = new Flag(x, y, width, height, flag_end_x, flag_end_y);
 		stage.addActor(flag);
 	}
 	
@@ -260,7 +266,7 @@ public class World {
 	
 	private void endLevel() {
 		if(player.rect.overlaps(flag.rect())) {
-			player.captureFlag(flag.rect());
+			player.captureFlag(flag.rect(), flag.getEndX(), flag.getEndY());
 			level_ended = true;
 		}
 	}

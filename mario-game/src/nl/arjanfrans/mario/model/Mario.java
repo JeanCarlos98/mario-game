@@ -5,6 +5,8 @@ import nl.arjanfrans.mario.actions.MoveableActions;
 import nl.arjanfrans.mario.audio.Audio;
 import nl.arjanfrans.mario.debug.D;
 import nl.arjanfrans.mario.graphics.MarioAnimation;
+import nl.arjanfrans.mario.model.MovingActor.Direction;
+import nl.arjanfrans.mario.model.MovingActor.State;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -24,7 +26,7 @@ public class Mario extends Creature {
 	private boolean immume;
 	private SpriteBatch batch = new SpriteBatch();
 	protected Rectangle rect = new Rectangle();
-
+	private boolean controlsEnabled = true;
 
 
 	public Mario(World world, float positionX, float positionY) {
@@ -69,11 +71,20 @@ public class Mario extends Creature {
 	}
 	
 
-	public void captureFlag(Rectangle flagRect) {
+	/**
+	 * 
+	 * @param flagRect Rectangle of the Flag object.
+	 * @param endX X-position of ending point.
+	 * @param endY Y-position of ending point.
+	 */
+	public void captureFlag(Rectangle flagRect, float endX, float endY) {
 		state = State.FlagSlide;
 		this.addAction(Actions.sequence(
 				Actions.delay(0.2f),
-				Actions.moveTo(this.getX(), flagRect.y, 0.5f, Interpolation.linear)));
+				Actions.moveTo(this.getX(), flagRect.y, 0.5f, Interpolation.linear),
+				MarioActions.setStateAction(this, State.Walking),
+				MarioActions.walkToAction(this, endX, endY))
+			);
 	}
 
 	protected void dieByFalling() {
@@ -92,14 +103,16 @@ public class Mario extends Creature {
 		super.act(delta);
 		if(state != State.Dying) {
 			if(state != State.FlagSlide) {
-				if ((Gdx.input.isKeyPressed(Keys.SPACE) || isTouched(0.75f, 1)) && grounded) {
-					jump();
-				}
-				if (Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A) || isTouched(0, 0.25f)) {
-					move(Direction.LEFT);
-				}
-				if (Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.D) || isTouched(0.25f, 0.5f)) {
-					move(Direction.RIGHT);
+				if(controlsEnabled) {
+					if ((Gdx.input.isKeyPressed(Keys.SPACE) || isTouched(0.75f, 1)) && grounded) {
+						jump();
+					}
+					if (Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A) || isTouched(0, 0.25f)) {
+						move(Direction.LEFT);
+					}
+					if (Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.D) || isTouched(0.25f, 0.5f)) {
+						move(Direction.RIGHT);
+					}
 				}
 					
 				width = gfx.getFrameWidth(level, width);
@@ -240,6 +253,32 @@ public class Mario extends Creature {
 
 	public void setImmume(boolean immume) {
 		this.immume = immume;
+	}
+	
+	@Override
+	public void move(Direction dir) {
+		if(state != State.Dying && moving) {
+			if(dir == Direction.LEFT) {
+				velocity.x = -max_velocity;
+				facesRight = false;
+			}
+			else {
+				velocity.x = max_velocity;
+				facesRight = true;
+			}
+			direction = dir;
+			if (grounded) {
+				state = MovingActor.State.Walking;
+			}
+		}
+	}
+
+	public boolean isControlsEnabled() {
+		return controlsEnabled;
+	}
+
+	public void setControlsEnabled(boolean controlsEnabled) {
+		this.controlsEnabled = controlsEnabled;
 	}
 
 

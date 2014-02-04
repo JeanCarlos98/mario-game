@@ -69,7 +69,6 @@ public class ParallaxBackground {
 			MapObject obj = it.next();
 			float x = (float) ((Integer) obj.getProperties().get("x") * 1/16f);
 			float y = (float) ((Integer) obj.getProperties().get("y") * 1/16f);
-			D.o(String.valueOf((float) ((Integer) obj.getProperties().get("y") * 1/16f)));
 			
 			String file = "data/backgrounds/" + (String) obj.getProperties().get("src");
 			Texture texture = layer.getLayerTextures().get(file);

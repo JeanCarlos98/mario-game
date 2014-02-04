@@ -53,13 +53,13 @@ public class WorldRenderer {
 		stage = world.getStage();
 		stage.setViewport(16, 12, true);
 
-		// create an orthographic camera, shows us 30x20 units of the world
+
 		camera = new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
 		camera.setToOrtho(false, 16, 12);
 		camera.update();
 		Gdx.gl.glEnable(GL10.GL_TEXTURE_2D);
 		Gdx.gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_NEAREST);
-		// create the Koala we want to move around the world
+
 
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();

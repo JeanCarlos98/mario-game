@@ -14,7 +14,7 @@ public abstract class MovingActor extends Actor {
 	//TODO Some states are for Mario only, they don't belong in this class.
 	public static enum State {
 		
-		Standing, Walking, Jumping, Dying, Dead, FlagSlide
+		Standing, Walking, Jumping, Dying, Dead, FlagSlide, NoControl
 	}
 	public static enum Direction {
 		LEFT, RIGHT;
@@ -192,7 +192,7 @@ public abstract class MovingActor extends Actor {
 		rectPool.free(rect);
 	}
 
-	protected void move(Direction dir) {
+	public void move(Direction dir) {
 		if(state != State.Dying && moving) {
 			if(dir == Direction.LEFT) {
 				velocity.x = -max_velocity;

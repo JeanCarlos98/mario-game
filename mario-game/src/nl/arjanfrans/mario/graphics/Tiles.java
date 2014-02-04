@@ -1,5 +1,7 @@
 package nl.arjanfrans.mario.graphics;
 
+import nl.arjanfrans.mario.debug.D;
+
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
@@ -30,7 +32,7 @@ public class Tiles {
 	
 	public static TextureRegion getTile(String name) {
 		AtlasRegion ar = atlas.findRegion(name);
-		TextureRegion[] tr = ar.split(16, 16)[0];
+		TextureRegion[] tr = ar.split(ar.getRegionWidth(), ar.getRegionHeight())[0];
 		return tr[0];
 	}
 	

@@ -12,13 +12,17 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 public class Flag extends Actor {
 	private Animation animation;
 	private float stateTime;
+	private float endX;
+	private float endY;
 	
-	public Flag(float x, float y, float width, float height) {
+	public Flag(float x, float y, float width, float height, float endX, float endY) {
 		animation = Tiles.getAnimation(0.15f, "evil_flag");
 		animation.setPlayMode(Animation.LOOP_PINGPONG);
 		this.setOrigin(width / 2, height);
 		this.setBounds(x + (8 * World.scale), y, 2 * World.scale, height);
 		this.setTouchable(Touchable.disabled);
+		this.endX = endX;
+		this.endY = endY;
 	}
 	
 	@Override
@@ -36,6 +40,14 @@ public class Flag extends Actor {
 	
 	public Rectangle rect() {
 		return new Rectangle(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+	}
+
+	public float getEndX() {
+		return endX;
+	}
+
+	public float getEndY() {
+		return endY;
 	}
 	
 	
