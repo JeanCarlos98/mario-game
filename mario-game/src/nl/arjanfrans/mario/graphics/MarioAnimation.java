@@ -19,39 +19,38 @@ public class MarioAnimation extends CharacterAnimation {
 	private static Animation crouch_big;
 	private static Animation flagslide_small;
 	private static Animation flagslide_big;
+	private static Animation pose_small;
+	private static Animation pose_big;
 	
 
 	public MarioAnimation() {
 		Array<AtlasRegion> regions = atlas.findRegions("mario_mini_walking");
 		standing = new Animation(0, regions.get(0));
-
 		walking = new Animation(0.1f, regions);
 		walking.setPlayMode(Animation.LOOP_PINGPONG);
 					
-		AtlasRegion region = atlas.findRegion("mario_mini_jump");
-		jumping = new Animation(0, region);
+		jumping = new Animation(0, atlas.findRegion("mario_mini_jump"));
 		
-		region = atlas.findRegion("mario_mini_dead");
-		dying = new Animation(0, region);
+		dying = new Animation(0, atlas.findRegion("mario_mini_dead"));
 
+		// For animation with more than 1 frames use 'regions = atlas.findRegions("..."). Otherwise it won't work. Why???
 		regions = atlas.findRegions("mario_big_walking");
 		standing_big = new Animation(0, regions.get(0));
-
 		walking_big = new Animation(0.1f, regions);
 		walking_big.setPlayMode(Animation.LOOP_PINGPONG);
 		
+		jumping_big = new Animation(0, atlas.findRegion("mario_big_jump"));
 		
-		region = atlas.findRegion("mario_big_jump");
-		jumping_big = new Animation(0, region);
+		crouch_big = new Animation(0, atlas.findRegion("mario_big_crouch"));
 		
-		region = atlas.findRegion("mario_big_crouch");
-		crouch_big = new Animation(0, region);
+		regions = atlas.findRegions("mario_big_flagslide");
+		flagslide_big = new Animation(1f, regions);
 		
-		region = atlas.findRegion("mario_big_flagslide");
-		flagslide_big = new Animation(0, region);
+		regions = atlas.findRegions("mario_mini_flagslide");
+		flagslide_small = new Animation(1f, regions);
 		
-		region = atlas.findRegion("mario_mini_flagslide");
-		flagslide_small = new Animation(0, region);
+		regions = atlas.findRegions("mario_big_pose");
+		pose_big = new Animation(3.5f, regions);
 		
 	}
 
@@ -88,6 +87,13 @@ public class MarioAnimation extends CharacterAnimation {
 				}
 			case Dying:
 				return dying;
+			case Pose:
+				if(level == 1) {
+					return pose_small;
+				}
+				else if(level == 2) {
+					return pose_big;
+				}
 			default:
 					return standing;
 		}
@@ -95,7 +101,7 @@ public class MarioAnimation extends CharacterAnimation {
 	
 	public Vector2 getDimensions(State state, int level) {
 		switch(state) {
-			/*case Walking:
+			case Walking:
 				if(level == 1) {
 					return new Vector2(walking.getKeyFrame(0).getRegionWidth() * scale, 
 							walking.getKeyFrame(0).getRegionHeight() * scale);
@@ -104,6 +110,7 @@ public class MarioAnimation extends CharacterAnimation {
 					return new Vector2(walking_big.getKeyFrame(0).getRegionWidth() * scale, 
 							walking_big.getKeyFrame(0).getRegionHeight() * scale);
 				}
+				break;
 			case Standing:
 				if(level == 1) {
 					return new Vector2(standing.getKeyFrame(0).getRegionWidth() * scale, 
@@ -112,7 +119,8 @@ public class MarioAnimation extends CharacterAnimation {
 				else if(level == 2) {
 					return new Vector2(standing_big.getKeyFrame(0).getRegionWidth() * scale, 
 							standing_big.getKeyFrame(0).getRegionHeight() * scale);
-				}*/
+				}
+				break;
 			case Jumping:
 				if(level == 1) {
 					//TODO define sizes in constructor
@@ -120,9 +128,30 @@ public class MarioAnimation extends CharacterAnimation {
 							jumping.getKeyFrame(0).getRegionHeight() * scale);
 				}
 				else if(level == 2) {
-				return new Vector2(jumping_big.getKeyFrame(0).getRegionWidth() * scale, 
+					return new Vector2(jumping_big.getKeyFrame(0).getRegionWidth() * scale, 
 						jumping_big.getKeyFrame(0).getRegionHeight() * scale);
 				}
+				break;
+			case Pose:
+				if(level == 1) {
+					return new Vector2(pose_small.getKeyFrame(0).getRegionWidth() * scale, 
+							pose_small.getKeyFrame(0).getRegionHeight() * scale);
+				}
+				else if(level == 2) {
+					return new Vector2(pose_big.getKeyFrame(0).getRegionWidth() * scale, 
+						pose_big.getKeyFrame(0).getRegionHeight() * scale);
+				}
+				break;
+			case FlagSlide:
+				if(level == 1) {
+					return new Vector2(flagslide_small.getKeyFrame(0).getRegionWidth() * scale, 
+							flagslide_small.getKeyFrame(0).getRegionHeight() * scale);
+				}
+				else if(level == 2) {
+					return new Vector2(flagslide_big.getKeyFrame(0).getRegionWidth() * scale, 
+							flagslide_big.getKeyFrame(0).getRegionHeight() * scale);
+				}
+				break;
 			case Dying:
 				return new Vector2(dying.getKeyFrame(0).getRegionWidth() * scale, 
 						dying.getKeyFrame(0).getRegionHeight() * scale);
@@ -135,6 +164,7 @@ public class MarioAnimation extends CharacterAnimation {
 					return new Vector2(walking_big.getKeyFrame(0).getRegionWidth() * scale, 
 							walking_big.getKeyFrame(0).getRegionHeight() * scale);
 				}
+				break;
 		}
 		return new Vector2(dying.getKeyFrame(0).getRegionWidth() * scale, 
 				dying.getKeyFrame(0).getRegionHeight() * scale);

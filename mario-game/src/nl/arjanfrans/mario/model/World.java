@@ -180,6 +180,7 @@ public class World {
 						String type = (String) oldTile.getProperties().get("actor");
 						StaticActor actor = null;
 						if(type.equals("Brick") || type.equals("Bonus")) {
+							//TODO add other colored bricks
 							String color = (String) oldTile.getProperties().get("color");
 							boolean destructable = false;
 							if(oldTile.getProperties().containsKey("destructable")) {
@@ -266,7 +267,7 @@ public class World {
 	
 	private void endLevel() {
 		if(player.rect.overlaps(flag.rect())) {
-			player.captureFlag(flag.rect(), flag.getEndX(), flag.getEndY());
+			player.captureFlag(flag, flag.getEndX(), flag.getEndY());
 			level_ended = true;
 		}
 	}

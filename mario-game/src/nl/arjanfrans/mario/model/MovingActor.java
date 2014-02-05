@@ -14,7 +14,7 @@ public abstract class MovingActor extends Actor {
 	//TODO Some states are for Mario only, they don't belong in this class.
 	public static enum State {
 		
-		Standing, Walking, Jumping, Dying, Dead, FlagSlide, NoControl
+		Standing, Walking, Jumping, Dying, Dead, FlagSlide, NoControl, Pose
 	}
 	public static enum Direction {
 		LEFT, RIGHT;

@@ -274,7 +274,7 @@
    </properties>
   </object>
   <object name="mario" type="mario" x="3168" y="112" width="32" height="32"/>
-  <object name="flag_end" type="flag_end" x="3520" y="272" width="32" height="32"/>
+  <object name="flag_end" type="flag_end" x="3520" y="272" width="16" height="32"/>
   <object x="704" y="608" width="304" height="16"/>
   <object x="3040" y="480"/>
  </objectgroup>

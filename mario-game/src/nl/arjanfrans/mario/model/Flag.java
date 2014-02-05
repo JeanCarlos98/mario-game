@@ -1,12 +1,17 @@
 package nl.arjanfrans.mario.model;
 
+import nl.arjanfrans.mario.actions.MarioActions;
+import nl.arjanfrans.mario.debug.D;
 import nl.arjanfrans.mario.graphics.Tiles;
+import nl.arjanfrans.mario.model.MovingActor.State;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 
 public class Flag extends Actor {
@@ -14,6 +19,9 @@ public class Flag extends Actor {
 	private float stateTime;
 	private float endX;
 	private float endY;
+	private boolean down = false;
+	private float bottomY;
+	private float slideOffset = 2;
 	
 	public Flag(float x, float y, float width, float height, float endX, float endY) {
 		animation = Tiles.getAnimation(0.15f, "evil_flag");
@@ -23,6 +31,7 @@ public class Flag extends Actor {
 		this.setTouchable(Touchable.disabled);
 		this.endX = endX;
 		this.endY = endY;
+		this.bottomY = y - (height - slideOffset);
 	}
 	
 	@Override
@@ -30,11 +39,18 @@ public class Flag extends Actor {
 		stateTime += delta;
 		super.act(delta);
 	}
+	
+	public void takeDown() {
+		this.addAction(Actions.sequence(
+				Actions.delay(0.2f),
+				Actions.moveBy(0, -(this.getHeight() - slideOffset), 2f))
+			);
+	}
 
 
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
-		batch.draw(animation.getKeyFrame(stateTime), this.getX() - (1 * World.scale), this.getHeight() , 
+		batch.draw(animation.getKeyFrame(stateTime), this.getX() - (1 * World.scale),  this.getY() + (this.getHeight() - slideOffset), 
 				animation.getKeyFrame(stateTime).getRegionWidth() * World.scale, animation.getKeyFrame(stateTime).getRegionHeight() * World.scale);
 	}
 	
@@ -48,6 +64,14 @@ public class Flag extends Actor {
 
 	public float getEndY() {
 		return endY;
+	}
+
+	public boolean isDown() {
+		return Math.round(this.getY()) == bottomY;
+	}
+
+	public void setDown(boolean down) {
+		this.down = down;
 	}
 	
 	

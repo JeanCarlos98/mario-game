@@ -77,13 +77,18 @@ public class Mario extends Creature {
 	 * @param endX X-position of ending point.
 	 * @param endY Y-position of ending point.
 	 */
-	public void captureFlag(Rectangle flagRect, float endX, float endY) {
+	public void captureFlag(Flag flag, float endX, float endY) {
+		Rectangle flagRect = flag.rect();
 		state = State.FlagSlide;
+		//TODO Flip mario sprite in sliding pose when at bottom
 		this.addAction(Actions.sequence(
 				Actions.delay(0.2f),
-				Actions.moveTo(this.getX(), flagRect.y, 0.5f, Interpolation.linear),
+				Actions.parallel(
+						Actions.moveTo(this.getX(), flagRect.y, 0.5f, Interpolation.linear), 
+						MarioActions.flagTakeDownAction(flag)),
 				MarioActions.setStateAction(this, State.Walking),
-				MarioActions.walkToAction(this, endX, endY))
+				MarioActions.walkToAction(this, endX, endY),
+				MarioActions.setStateAction(this, State.Pose))
 			);
 	}
 
@@ -213,6 +218,34 @@ public class Mario extends Creature {
 				}
 			}
 		}
+	}
+	
+	@Override
+	protected void applyPhysics(Rectangle rect) {
+		float deltaTime = Gdx.graphics.getDeltaTime();
+		if (deltaTime == 0) return;
+		stateTime += deltaTime;
+		
+		velocity.add(0, world.getGravity()); // apply gravity if we are falling
+
+		if (Math.abs(velocity.x) < 1) {	// clamp the velocity to 0 if it's < 1, and set the state to standing
+			velocity.x = 0;
+			if (grounded && controlsEnabled) {
+				state = State.Standing;
+			}
+		}
+
+		velocity.scl(deltaTime); // multiply by delta time so we know how far we go in this frame
+
+		if(collisionX(rect)) collisionXAction();
+		rect.x = this.getX();
+		collisionY(rect);
+
+		this.setPosition(this.getX() + velocity.x, this.getY() + velocity.y); // unscale the velocity by the inverse delta time and set the latest position
+		velocity.scl(1 / deltaTime);
+		velocity.x *= damping; // Apply damping to the velocity on the x-axis so we don't walk infinitely once a key was pressed
+		
+		dieByFalling();
 	}
 
 	/**

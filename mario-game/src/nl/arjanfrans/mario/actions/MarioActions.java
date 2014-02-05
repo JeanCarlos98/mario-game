@@ -1,5 +1,6 @@
 package nl.arjanfrans.mario.actions;
 
+import nl.arjanfrans.mario.model.Flag;
 import nl.arjanfrans.mario.model.Mario;
 import nl.arjanfrans.mario.model.MovingActor;
 import nl.arjanfrans.mario.model.MovingActor.Direction;
@@ -40,6 +41,23 @@ public class MarioActions extends Actions {
 		public boolean act(float delta) {
 			((Mario) actor).setImmume(false);
 			return true;
+		}
+	}
+	
+	public static Action flagTakeDownAction(Flag flag) {
+		return new flagTakeDown(flag);
+	}
+
+	static public class flagTakeDown extends Action {
+		private Flag flag;
+		
+		public flagTakeDown(Flag flag) {
+			this.flag = flag;
+			flag.takeDown();
+		}
+
+		public boolean act(float delta) {
+			return flag.isDown();
 		}
 	}
 	
