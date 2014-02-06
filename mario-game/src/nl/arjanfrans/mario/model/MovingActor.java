@@ -75,7 +75,7 @@ public abstract class MovingActor extends Actor {
 		if (deltaTime == 0) return;
 		stateTime += deltaTime;
 		
-		velocity.add(0, world.getGravity()); // apply gravity if we are falling
+		velocity.add(0, World.GRAVITY * deltaTime); // apply gravity if we are falling
 
 		if (Math.abs(velocity.x) < 1) {	// clamp the velocity to 0 if it's < 1, and set the state to standing
 			velocity.x = 0;

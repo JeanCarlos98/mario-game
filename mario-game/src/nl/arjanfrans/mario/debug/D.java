@@ -9,4 +9,10 @@ public class D {
 			System.out.println(msg);
 		}
 	}
+	
+	public static void o(float msg) {
+		if(MarioGame.DEBUG) {
+			System.out.println(msg);
+		}
+	}
 }

@@ -32,7 +32,7 @@ import com.badlogic.gdx.utils.Pool;
 public class World {
 	private Mario player;
 	private TiledMap map;
-	private static final float GRAVITY = -2.5f;
+	public static final float GRAVITY = -150;
 	public static final float scale = 1/16f;
 	private Array<Goomba> goombas;
 	private Array<Mushroom> mushrooms;
@@ -282,10 +282,6 @@ public class World {
 	
 	public TiledMap getMap() {
 		return map;
-	}
-	
-	public float getGravity() {
-		return GRAVITY;
 	}
 	
 	public Array<Goomba> getEnemies() {

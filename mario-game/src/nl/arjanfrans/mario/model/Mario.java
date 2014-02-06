@@ -24,7 +24,6 @@ public class Mario extends Creature {
 	protected MarioAnimation gfx = new MarioAnimation();
 	private float jump_boost = 40f, width, height;
 	private boolean immume;
-	private SpriteBatch batch = new SpriteBatch();
 	protected Rectangle rect = new Rectangle();
 	private boolean controlsEnabled = true;
 
@@ -94,6 +93,7 @@ public class Mario extends Creature {
 
 	protected void dieByFalling() {
 		if(this.getY() < -3f) {
+			//TODO create some kind of sensor for dying
 			state = State.Dying;
 			velocity.set(0, 0);
 			this.addAction(Actions.sequence(Actions.delay(3f),
@@ -220,13 +220,14 @@ public class Mario extends Creature {
 		}
 	}
 	
+	float maxheight;
 	@Override
 	protected void applyPhysics(Rectangle rect) {
 		float deltaTime = Gdx.graphics.getDeltaTime();
 		if (deltaTime == 0) return;
 		stateTime += deltaTime;
 		
-		velocity.add(0, world.getGravity()); // apply gravity if we are falling
+		velocity.add(0, World.GRAVITY * deltaTime); // apply gravity if we are falling
 
 		if (Math.abs(velocity.x) < 1) {	// clamp the velocity to 0 if it's < 1, and set the state to standing
 			velocity.x = 0;
@@ -240,9 +241,11 @@ public class Mario extends Creature {
 		if(collisionX(rect)) collisionXAction();
 		rect.x = this.getX();
 		collisionY(rect);
+		
 
-		this.setPosition(this.getX() + velocity.x, this.getY() + velocity.y); // unscale the velocity by the inverse delta time and set the latest position
-		velocity.scl(1 / deltaTime);
+		this.setPosition(this.getX() + velocity.x, this.getY() +velocity.y); 
+		velocity.scl(1 / deltaTime); // unscale the velocity by the inverse delta time and set the latest position
+		
 		velocity.x *= damping; // Apply damping to the velocity on the x-axis so we don't walk infinitely once a key was pressed
 		
 		dieByFalling();

@@ -3,6 +3,7 @@ package nl.arjanfrans.mario.model.brick;
 import nl.arjanfrans.mario.graphics.Tiles;
 import nl.arjanfrans.mario.model.World;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -69,10 +70,10 @@ public class BrickPiece extends Sprite {
 			}
 			angle += speed;
 			position.x += original_position.x;
-			position.y += original_position.y + 1/16;
+			position.y += original_position.y + 1/16 * Gdx.graphics.getDeltaTime();
 		}
 		else {
-			position.y -= speed;
+			position.y -= speed * Gdx.graphics.getDeltaTime();
 		}
 		this.rotate(rotation);
 			

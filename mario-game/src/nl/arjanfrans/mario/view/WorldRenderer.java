@@ -173,7 +173,7 @@ public class WorldRenderer {
 		stage.draw();
 
 		//		renderer.getSpriteBatch().begin();
-		//		renderer.getSpriteBatch().draw(player.getAnimation().getKeyFrame(0).getTexture(), camera.position.x - camera.viewportWidth/2, 
+	//		renderer.getSpriteBatch().draw(player.getAnimation().getKeyFrame(0).getTexture(), camera.position.x - camera.viewportWidth/2, 
 		//				camera.position.y-camera.viewportHeight/2,
 		//				camera.viewportWidth, camera.viewportHeight);
 		//		renderer.getSpriteBatch().end();
